@@ -33,7 +33,7 @@
         g_random: true, // 随机播放图标
         g_refresh: false, // 单曲循环图标
         g_sort: false, // 顺序播放图标
-        g_model_title: '顺序', // 播放模式提示文字
+        g_model_title: '随机', // 播放模式提示文字
         g_heart_title: '喜欢', // 是否标记喜欢提示文字
         g_heart: false, // 是否标记为喜欢图标
         loop: false, // 是否单曲循环
@@ -51,6 +51,7 @@
       }
     },
     created () {
+      this.init()
       this.music_play = this.music_arr[this.music_index]
     },
     computed: {
@@ -88,9 +89,17 @@
         }
         btn[0].onended = function () { // 媒体播放结束,根据播放模式选择下一步操作
           if (self.g_random) { // 随机模式播放
-            console.log()
+            self.loop = false
+            self.pause_media()
+            self.music_play = self.music_arr[Number.parseInt(Math.random() * (self.music_arr.length - 1))]
+            console.log(Number.parseInt(Math.random() * (self.music_arr.length - 1)), self.music_play)
+            /* setTimeout(function () {
+              self.play_media()
+            }, 1000) */
           } else if (self.g_refresh) { // 单曲循环播放
+            self.loop = true
           } else if (self.g_sort) { // 顺序播放
+            self.loop = false
             self.changeMusic(1)
           }
         }
@@ -173,6 +182,10 @@
           self.loop = false
           self.g_model_title = '随机'
         }
+      },
+      init () { // 初始化播放控件
+        let btn = $('#mp3Btn')
+        console.log(btn)
       }
     }
   }
